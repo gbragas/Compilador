@@ -2,5 +2,11 @@ programa
     declare a : number;
     declare b : number;
     declare c, d : text;
-    2 + 3.14 - 5 * 8.56 / a - b * c;
+    inicio
+        write("Hello World");
+        read(c);
+        a = 2 + 3.14 - 5 * 8.56 / a - c * a;
+        write("The result is");
+        read(b);
+    fim
 fimprog

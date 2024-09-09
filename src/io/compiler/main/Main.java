@@ -23,8 +23,9 @@ public class Main {
             parser.getVars();
 
         }
-        catch (Exception e) {
-            e.printStackTrace();
+        catch (Exception ex) {
+            System.err.println("Error: " + ex.getMessage());
+            ex.printStackTrace();
         }
     }
 }

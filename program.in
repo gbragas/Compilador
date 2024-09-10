@@ -1,0 +1,15 @@
+programa program
+    declare a, b: number;
+    inicio
+        read(a);
+        read(b);
+        write(a);
+        write("oi");
+
+        if (a + 5 < b - 6) {
+            write(a);
+        } else {
+            write(b);
+        }
+    fim
+fimprog

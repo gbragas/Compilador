@@ -2,9 +2,11 @@
 package io.compiler.core;
 
     import java.util.ArrayList;
+    import java.util.Stack;
     import java.util.HashMap;
     import io.compiler.types.*;
     import io.compiler.core.exceptions.*;
+    import io.compiler.core.ast.*;
 
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -43,6 +45,16 @@ public interface GrammarListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitComando(GrammarParser.ComandoContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link GrammarParser#cmdIf}.
+	 * @param ctx the parse tree
+	 */
+	void enterCmdIf(GrammarParser.CmdIfContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link GrammarParser#cmdIf}.
+	 * @param ctx the parse tree
+	 */
+	void exitCmdIf(GrammarParser.CmdIfContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link GrammarParser#cmdAttrib}.
 	 * @param ctx the parse tree

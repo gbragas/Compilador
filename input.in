@@ -1,12 +1,17 @@
-programa
+programa input
     declare a : number;
     declare b : number;
     declare c, d : text;
     inicio
         write("Hello World");
-        read(c);
-        a = 2 + 3.14 - 5 * 8.56 / a - c * a;
+        read(a);
+        b = 2 + 3.14 - 5 * 8.56 / a - b * a;
         write("The result is");
-        read(b);
+
+        if (a + 5 < b - 6) {
+            b = a;
+        } else {
+            a = b;
+        }
     fim
 fimprog

@@ -2,9 +2,11 @@ grammar Grammar;
 
 @header {
     import java.util.ArrayList;
+    import java.util.Stack;
     import java.util.HashMap;
     import io.compiler.types.*;
     import io.compiler.core.exceptions.*;
+    import io.compiler.core.ast.*;
 }
 
 @members {
@@ -12,6 +14,10 @@ grammar Grammar;
     private ArrayList<Var> currentDecl = new ArrayList<Var>();
     private Types currentType;
     private Types leftType, rightType;
+    private Program program = new Program();
+    private Stack<ArrayList<Command>> stack = new Stack<ArrayList<Command>>();
+    private String strExpr = "";
+    private IfCommand currentIfCommand;
 
     public void updateType() {
         for (Var v: currentDecl) {
@@ -26,18 +32,27 @@ grammar Grammar;
         }
     }
 
+    public Program getProgram() {
+        return this.program;
+    }
+
     public boolean isDeclared(String id) {
         return symbolTable.get(id) != null;
     }
 }
 
 
-programa    : 'programa'
+programa    : 'programa' ID { program.setName(_input.LT(-1).getText());
+                              stack.push(new ArrayList<Command>());
+                            }
                declararvar+
                'inicio'
                comando+
                'fim'
-               'fimprog'
+               'fimprog' {
+                    program.setSymbolTable(symbolTable);
+                    program.setCommandList(stack.pop());
+                }
             ;
 
 declararvar : 'declare' { currentDecl.clear(); }
@@ -54,6 +69,26 @@ declararvar : 'declare' { currentDecl.clear(); }
 comando     : cmdAttrib
             | cmdRead
             | cmdWrite
+            | cmdIf
+            ;
+
+cmdIf       : 'if' {
+                        stack.push(new ArrayList<Command>());
+                        strExpr = "";
+                        currentIfCommand = new IfCommand();
+                   }
+            AP
+            expr
+            OP_REL { strExpr += _input.LT(-1).getText(); }
+            expr
+            FP { currentIfCommand.setExpression(strExpr); }
+            AC
+            comando+ { currentIfCommand.setTrueList(stack.pop()); }
+            FC (
+            'else' { stack.push(new ArrayList<Command>()); }
+            AC
+            comando+ { currentIfCommand.setFalseList(stack.pop()); }
+            FC )? { stack.peek().add(currentIfCommand); }
             ;
 
 cmdAttrib   : ID { if (!isDeclared(_input.LT(-1).getText())) {
@@ -79,14 +114,23 @@ cmdRead     : 'read' AP
                          throw new SemanticException("Undeclared Variable: " + _input.LT(-1).getText());
                      }
                      symbolTable.get(_input.LT(-1).getText()).setInitialized(true);
+                     Command cmdRead = new ReadCommand(symbolTable.get(_input.LT(-1).getText()));
+                     stack.peek().add(cmdRead);
                    }
                FP PV
             ;
 
-cmdWrite    : 'write' AP ( termo ) FP PV { rightType = null; }
+cmdWrite    : 'write' AP
+            (
+            termo {
+                    Command cmdWrite = new WriteCommand(_input.LT(-1).getText());
+                    stack.peek().add(cmdWrite);
+                  }
+            )
+            FP PV { rightType = null; }
             ;
 
-expr        : termo exprl
+expr        : termo { strExpr += _input.LT(-1).getText(); } exprl
             ;
 
 termo       : ID { if (!isDeclared(_input.LT(-1).getText())) {
@@ -123,13 +167,19 @@ termo       : ID { if (!isDeclared(_input.LT(-1).getText())) {
                     }
             ;
 
-exprl       : ( OP  termo ) *
+exprl       : (
+                OP { strExpr += _input.LT(-1).getText(); }
+                termo { strExpr += _input.LT(-1).getText(); }
+              ) *
             ;
 
 OP          : '+' | '-'| '*' | '/'
             ;
 
 OP_AT       : '='
+            ;
+
+OP_REL      : '<' | '>' | '>=' |  '<=' | '==' | '!='
             ;
 
 ID          : [a-z] ( [a-z] | [A-Z] | [0-9] )*
@@ -154,6 +204,12 @@ AP          : '('
             ;
 
 FP          : ')'
+            ;
+
+AC          : '{'
+            ;
+
+FC          : '}'
             ;
 
 TEXTO       : '"' ( [a-z] | [A-Z] | [0-9] | ',' | '.' | ';' | ':' | ' ' | '-' )* '"'

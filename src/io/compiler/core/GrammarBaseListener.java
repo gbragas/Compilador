@@ -2,9 +2,11 @@
 package io.compiler.core;
 
     import java.util.ArrayList;
+    import java.util.Stack;
     import java.util.HashMap;
     import io.compiler.types.*;
     import io.compiler.core.exceptions.*;
+    import io.compiler.core.ast.*;
 
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -54,6 +56,18 @@ public class GrammarBaseListener implements GrammarListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitComando(GrammarParser.ComandoContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterCmdIf(GrammarParser.CmdIfContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitCmdIf(GrammarParser.CmdIfContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

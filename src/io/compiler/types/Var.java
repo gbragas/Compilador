@@ -2,9 +2,20 @@ package io.compiler.types;
 
 public class Var {
     private String id;
-    private Types type;
+    private String value;
+    
+    public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
+	}
+
+	private Types type;
     private Boolean initialized;
     private Boolean used = false;
+    
 
     public Var(String id, Types type) {
         super();

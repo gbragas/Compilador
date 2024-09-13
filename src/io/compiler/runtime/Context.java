@@ -34,15 +34,17 @@ public class Context {
             // se der ruim, é variavel
             if (containsVariable(expression)) {
                 Var var = getVariable(expression);
+                //System.out.println("VARIAVEL RODANDO CONTEXT"+ var);
+                
                 if (var.getType() == Types.NUMBER && var.isInitialized()) {
                 	
                     // tipo NUMERO inicializada
-                    return Double.parseDouble(var.getId());
+                    return Double.parseDouble(var.getValue());
                     
                 } else if (var.getType() == Types.TEXT && var.isInitialized()) {
                 	
                     // tipo TEXT inicializada
-                    Object value = var.getId();
+                    Object value = var.getValue();
                     return (value != null) ? value.toString() : "";
                 } else {
                     throw new RuntimeException("Variável '" + expression + "' não inicializada ou tipo incompatível.");

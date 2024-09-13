@@ -164,10 +164,10 @@ cmdIf       : 'if' {
                         currentIfCommand = new IfCommand();
                    }
             AP
-            expr
-            OP_REL { strExpr += " "+ _input.LT(-1).getText() + " "; }
-            expr
-            FP { currentIfCommand.setExpression(strExpr); }
+            expr {currentIfCommand.setExpressionL(_input.LT(-1).getText());}
+            OP_REL {currentIfCommand.setOperation(_input.LT(-1).getText());}
+            expr {currentIfCommand.setExpressionR(_input.LT(-1).getText());}
+            FP 
             AC
             comando+ { currentIfCommand.setTrueList(stack.pop()); }
             FC (
@@ -347,7 +347,7 @@ OP_MUL	: '*'
 OP_DIV	: '/'
 		;
 
-OP_AT       : '='
+OP_AT       : '=' | '+=' | '-=' | '*=' | '/='
             ;
 
 OP_REL      : '<' | '>' | '>=' |  '<=' | '==' | '!='

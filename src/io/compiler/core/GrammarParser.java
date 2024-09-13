@@ -114,6 +114,7 @@ public class GrammarParser extends Parser {
 	    private WhileCommand currentWhileCommand;
 	    private DoWhileCommand currentDoWhileCommand;
 	    private AttributionCommand currentAttributionCommand;
+	    private Warning warning;
 	    
 	    
 
@@ -192,6 +193,8 @@ public class GrammarParser extends Parser {
 			match(ID);
 			 program.setName(_input.LT(-1).getText());
 			                              stack.push(new ArrayList<Command>());
+			                               Warning warning = new Warning();
+			                              
 			                            
 			setState(28); 
 			_errHandler.sync(this);
@@ -230,6 +233,13 @@ public class GrammarParser extends Parser {
 
 			                    program.setSymbolTable(symbolTable);
 			                    program.setCommandList(stack.pop());
+			                    for (String varId : symbolTable.keySet()) {
+								    Var var = symbolTable.get(varId);
+								    if (!var.isUsed()) {
+								        warning.addWarning("Variable '" + varId + "' declared but never used.");
+								}
+			}
+			                    warning.printWarnings();
 			                
 			}
 		}
@@ -791,6 +801,7 @@ public class GrammarParser extends Parser {
 			        
 			                
 			        currentAttributionCommand = new AttributionCommand();
+			        symbolTable.get(_input.LT(-1).getText()).setUsed(true);
 			        symbolTable.get(_input.LT(-1).getText()).setInitialized(true);
 			        leftType = symbolTable.get(_input.LT(-1).getText()).getType();
 			        
@@ -813,8 +824,8 @@ public class GrammarParser extends Parser {
 			        stack.peek().add(currentAttributionCommand);
 			        //System.out.println("Left Side Expression Type: " + leftType);
 			        //System.out.println("Right Side Expression Type: " + rightType);
-			        if (leftType.getValue() < rightType.getValue()) {
-			            throw new SemanticException("Type Missmatching on Assignment");
+			        if (!isTypeCompatible(leftType,rightType)) {
+			            throw new SemanticException("Type Missmatching on Assignment: " + leftType + " and " + rightType);
 			        }
 			    
 			}
@@ -865,6 +876,7 @@ public class GrammarParser extends Parser {
 			 if (!isDeclared(_input.LT(-1).getText())) {
 			                         throw new SemanticException("Undeclared Variable: " + _input.LT(-1).getText());
 			                     }
+			                     symbolTable.get(_input.LT(-1).getText()).setUsed(true);
 			                     symbolTable.get(_input.LT(-1).getText()).setInitialized(true);
 			                     Command cmdRead = new ReadCommand(symbolTable.get(_input.LT(-1).getText()));
 			                     stack.peek().add(cmdRead);
@@ -1027,6 +1039,8 @@ public class GrammarParser extends Parser {
 				                    if (!symbolTable.get(_input.LT(-1).getText()).isInitialized()) {
 				                         throw new SemanticException("Variable: " + _input.LT(-1).getText() +" has no value assigned");
 				                    }
+				                    
+				                    
 				                    if (rightType == null) {
 				                        rightType = symbolTable.get(_input.LT(-1).getText()).getType();
 				                    } else {
@@ -1034,6 +1048,8 @@ public class GrammarParser extends Parser {
 				                            rightType = symbolTable.get(_input.LT(-1).getText()).getType();
 				                        }
 				                    }
+				                    
+				                    
 				                  
 				}
 				break;

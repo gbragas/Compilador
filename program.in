@@ -1,19 +1,20 @@
 programa program
-    declare a, b: number;
+    declare a, b, c, fazoele: number;
+    declare palavra: text;
     inicio
         read(a);
         read(b);
         a = 2;
         b=3;
         a=b;
-        
-        
+        fazoele = 123.34;
+        palavra = "Abacaxi";      
         
         write("oi");
 
-        if (a + 5 < b - 6) {
+        if (a + 5 < b - 6 -2 +10) {
             write(a);
-            a=4 ;
+            
             a=4 ;
         } else {
             write(b);

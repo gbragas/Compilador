@@ -107,6 +107,7 @@ public class GrammarLexer extends Lexer {
 	    private WhileCommand currentWhileCommand;
 	    private DoWhileCommand currentDoWhileCommand;
 	    private AttributionCommand currentAttributionCommand;
+	    private Warning warning;
 	    
 	    
 

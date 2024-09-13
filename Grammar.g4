@@ -146,10 +146,10 @@ cmdWhile       : 'enquanto' {
                         currentWhileCommand = new WhileCommand();
                    }
             AP
-            expr
-            OP_REL { strExpr += " "+ _input.LT(-1).getText() + " "; }
-            expr
-            FP { currentWhileCommand.setExpression(strExpr); }
+            expr {currentWhileCommand.setExpressionL(_input.LT(-1).getText());}
+            OP_REL {currentWhileCommand.setOperation(_input.LT(-1).getText());}
+            expr {currentWhileCommand.setExpressionR(_input.LT(-1).getText());}
+            FP 
             AC
             comando+ { currentWhileCommand.setCommandList(stack.pop()); }          
             FC { stack.peek().add(currentWhileCommand); }
@@ -203,6 +203,7 @@ cmdAttrib : ID
     {
         
         stack.peek().add(currentAttributionCommand);
+        System.out.println("Resultado ultima conta: "+ generateValue());
         //System.out.println("Left Side Expression Type: " + leftType);
         //System.out.println("Right Side Expression Type: " + rightType);
         if (!isTypeCompatible(leftType,rightType)) {
@@ -242,11 +243,7 @@ fator       : ID { if (!isDeclared(_input.LT(-1).getText())) {
                          throw new SemanticException("Variable: " + _input.LT(-1).getText() +" has no value assigned");
                     }
                     
-                    
-
-                    
-                    
-                    
+ 
                     if (rightType == null) {
                         rightType = symbolTable.get(_input.LT(-1).getText()).getType();
                     } else {
@@ -286,25 +283,24 @@ exprl       : (
                 (OP_SUM | OP_SUB) 
                 {
                    strExpr += " "+ _input.LT(-1).getText() + " "; 		
-                   	                 
-	               BinaryExpression bin = new BinaryExpression(_input.LT(-1).getText().charAt(0));
-	               bin.setLeft(stackExpression.pop());
-	               stackExpression.push(bin);           
-				}
+                   
+                   BinaryExpression bin = new BinaryExpression(_input.LT(-1).getText().charAt(0));
+                   bin.setLeft(stackExpression.pop()); // Empilhar o lado esquerdo
+                   stackExpression.push(bin); // Colocar a operação binária na pilha
+                }
                 termo 
                 { 
                 	strExpr += _input.LT(-1).getText(); 
                 	
-                	AbstractExpression topo = stackExpression.pop(); // desempilhei o termo
-		         	BinaryExpression root = (BinaryExpression) stackExpression.pop(); // preciso do componente binário
-		         	root.setRight(topo);
-		         	stackExpression.push(root);
-                
+                	AbstractExpression topo = stackExpression.pop(); // Desempilhar o termo
+		         	BinaryExpression root = (BinaryExpression) stackExpression.pop(); // Desempilhar operação binária
+		         	root.setRight(topo); // Atribuir o lado direito
+		         	stackExpression.push(root); // Colocar a operação completa na pilha
                 }
               ) *
             ;
-            
-            
+
+                  
 termo	: fator	termol
 		;
 		
@@ -328,7 +324,7 @@ termol	: ((OP_MUL | OP_DIV) {
           fator {
              bin.setRight(stackExpression.pop());
              stackExpression.push(bin);
-             System.out.println("DEBUG - :" + bin.toJson());
+             
           }
 
           )*		

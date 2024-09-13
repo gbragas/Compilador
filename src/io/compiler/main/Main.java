@@ -33,10 +33,12 @@ public class Main {
             Runtime runtime = new Runtime(program.getSymbolTable(), program.getCommandList());
             runtime.run();
             
-            System.out.println(program.generateTarget());
-            System.out.println("Resultado ultima conta: "+ parser.generateValue());
+            System.out.println(parser.generateJSON());
             
-
+            
+            
+            
+            System.out.println(program.generateTarget());
             try {
                 File f = new File(program.getName()+".java");
                 FileWriter fw = new FileWriter(f);

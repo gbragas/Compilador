@@ -3,6 +3,9 @@ package io.compiler.core.ast;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.compiler.runtime.Context;
+import io.compiler.types.Var;
+
 public class IfCommand extends Command {
 
     private String expression;
@@ -89,4 +92,13 @@ public class IfCommand extends Command {
 
         return str.toString();
     }
+
+	@Override
+	public void execute(Context context) {
+		// TODO Auto-generated method stub
+		
+	}
+
+    
+
 }

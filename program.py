@@ -1,22 +1,23 @@
 # Código Python gerado
 
 def main():
-    a = 0
-    b = 0
-    a = int(input())
-    b = int(input())
-    a = 2
+    "Abacaxi" = ''
+    0.0 = 0
+    3.0 = 0
+    123.34 = 0
+    c = 0
+    0.0 = int(input())
+    3.0 = int(input())
+    a = 3
     b = 3
-    a = b
+    fazoele = 123.34
+    palavra = "Abacaxi"
     print("oi")
-    if a + 5 < b - 6:
-        print(a)
-        a = 4
-        a = 4
+    print(palavra)
+    if a == b:
+        print("a igual b")
     else:
-        print(b)
-        a = 4
-        a = 4
+        print("a eh diferente de  b")
     print(a)
     a = 4
     print(b)
@@ -25,9 +26,8 @@ def main():
         print(a)
         a = 4
     while True:
-        a = 4
-        print(b)
-        a = 4
+        print("Fazendo oq ta nesse trem aqui me mandando fazer")
+        a = 0
         if not (a==b):
             break
 

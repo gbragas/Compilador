@@ -2,6 +2,8 @@ package io.compiler.core.ast;
 
 import java.util.List;
 
+import io.compiler.runtime.Context;
+
 public class DoWhileCommand extends Command {
 
 	private String expressionL;
@@ -9,9 +11,7 @@ public class DoWhileCommand extends Command {
 	private String operation;
 	private List<Command> commandList;
 	
-	
-	
-	
+
 	
 	public DoWhileCommand(String expressiL, String expressiR, String operation, List<Command> commandList) {
 		super();
@@ -101,4 +101,35 @@ public class DoWhileCommand extends Command {
 
         return str.toString();
     }
+
+
+
+	@Override
+	public void execute(Context context) {
+	    do {
+	        for (Command cmd : commandList) {
+	            cmd.execute(context);
+	        }
+	    } while (evaluateCondition(context));
+	}
+
+	private boolean evaluateCondition(Context context) {
+	    
+	    double leftValue = (double) context.evaluateExpression(expressionL); 
+        
+	    double rightValue = (double) context.evaluateExpression(expressionR); 
+        
+
+	    switch (operation.strip()) {
+	        case "==": return leftValue == rightValue;
+	        case "!=": return leftValue != rightValue;
+	        case ">": return leftValue > rightValue;
+	        case "<": return leftValue < rightValue;
+	        case ">=": return leftValue >= rightValue;
+	        case "<=": return leftValue <= rightValue;
+	        default: throw new RuntimeException("Operação desconhecida: " + operation);
+	    }
+	    
+	}
+
 }

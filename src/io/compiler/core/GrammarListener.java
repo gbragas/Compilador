@@ -7,6 +7,10 @@ package io.compiler.core;
     import io.compiler.types.*;
     import io.compiler.core.exceptions.*;
     import io.compiler.core.ast.*;
+   	import io.compiler.runtime.*;
+   	import io.compiler.expressionevaluator.*;
+   	
+    
 
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -116,15 +120,15 @@ public interface GrammarListener extends ParseTreeListener {
 	 */
 	void exitExpr(GrammarParser.ExprContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link GrammarParser#termo}.
+	 * Enter a parse tree produced by {@link GrammarParser#fator}.
 	 * @param ctx the parse tree
 	 */
-	void enterTermo(GrammarParser.TermoContext ctx);
+	void enterFator(GrammarParser.FatorContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link GrammarParser#termo}.
+	 * Exit a parse tree produced by {@link GrammarParser#fator}.
 	 * @param ctx the parse tree
 	 */
-	void exitTermo(GrammarParser.TermoContext ctx);
+	void exitFator(GrammarParser.FatorContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link GrammarParser#exprl}.
 	 * @param ctx the parse tree
@@ -135,4 +139,24 @@ public interface GrammarListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitExprl(GrammarParser.ExprlContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link GrammarParser#termo}.
+	 * @param ctx the parse tree
+	 */
+	void enterTermo(GrammarParser.TermoContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link GrammarParser#termo}.
+	 * @param ctx the parse tree
+	 */
+	void exitTermo(GrammarParser.TermoContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link GrammarParser#termol}.
+	 * @param ctx the parse tree
+	 */
+	void enterTermol(GrammarParser.TermolContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link GrammarParser#termol}.
+	 * @param ctx the parse tree
+	 */
+	void exitTermol(GrammarParser.TermolContext ctx);
 }

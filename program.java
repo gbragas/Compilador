@@ -2,23 +2,24 @@ import java.util.Scanner;
 public class program {
     public static void main(String[] args) {
         Scanner _scTrx = new Scanner(System.in);
-        int a;
-        int b;
-        a = _scTrx.nextInt();
-        b = _scTrx.nextInt();
-        a = 2;
+        String "Abacaxi";
+        int 0.0;
+        int 3.0;
+        int 123.34;
+        int c;
+        0.0 = _scTrx.nextInt();
+        3.0 = _scTrx.nextInt();
+        a = 3;
         b = 3;
-        a = b;
+        fazoele = 123.34;
+        palavra = "Abacaxi";
         System.out.println("oi");
-        if (a + 5 < b - 6) {
-            System.out.println(a);
-            a = 4;
-            a = 4;
+        System.out.println(palavra);
+        if (a == b) {
+            System.out.println("a igual b");
         }
         else {
-                        System.out.println(b);
-            a = 4;
-            a = 4;
+                        System.out.println("a eh diferente de  b");
         }
         System.out.println(a);
         a = 4;
@@ -29,9 +30,8 @@ public class program {
             a = 4;
         }
         do {
-            a = 4;
-            System.out.println(b);
-            a = 4;
+            System.out.println("Fazendo oq ta nesse trem aqui me mandando fazer");
+            a = 0;
         } while (a==b); 
     }
 }

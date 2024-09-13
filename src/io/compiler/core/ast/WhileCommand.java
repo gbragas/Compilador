@@ -3,6 +3,8 @@ package io.compiler.core.ast;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.compiler.runtime.Context;
+
 public class WhileCommand extends Command {
 
 	private String expression;
@@ -57,5 +59,10 @@ public class WhileCommand extends Command {
 	    }
 
 	    return str.toString();
+	}
+	@Override
+	public void execute(Context context) {
+		// TODO Auto-generated method stub
+		
 	}
 }

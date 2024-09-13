@@ -2,36 +2,40 @@ import java.util.Scanner;
 public class program {
     public static void main(String[] args) {
         Scanner _scTrx = new Scanner(System.in);
-        String "Abacaxi";
-        int 0.0;
-        int 3.0;
-        int 123.34;
+        String palavra;
+        int a;
+        int b;
+        int fazoele;
         int c;
-        0.0 = _scTrx.nextInt();
-        3.0 = _scTrx.nextInt();
-        a = 3;
-        b = 3;
+        a = _scTrx.nextInt();
+        b = _scTrx.nextInt();
+        System.out.println("somando 2 no a");
+        a += 2;
+        System.out.println(a);
         fazoele = 123.34;
+        System.out.println(fazoele);
         palavra = "Abacaxi";
         System.out.println("oi");
         System.out.println(palavra);
         if (a == b) {
             System.out.println("a igual b");
+
         }
         else {
-                        System.out.println("a eh diferente de  b");
+            System.out.println("a eh diferente de  b");
+
         }
-        System.out.println(a);
-        a = 4;
-        System.out.println(b);
-        a = 4;
         while (a < b) {
             System.out.println(a);
             a = 4;
         }
+        System.out.println(" ------------ ");
+        System.out.println("Teste do DoWhile");
+        System.out.println(a);
+        System.out.println(b);
         do {
-            System.out.println("Fazendo oq ta nesse trem aqui me mandando fazer");
-            a = 0;
-        } while (a==b); 
+            a += 1;
+            System.out.println(a);
+        } while (a<10); 
     }
 }

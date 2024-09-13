@@ -1,34 +1,38 @@
 # Código Python gerado
 
 def main():
-    "Abacaxi" = ''
-    0.0 = 0
-    3.0 = 0
-    123.34 = 0
+    palavra = ''
+    a = 0
+    b = 0
+    fazoele = 0
     c = 0
-    0.0 = int(input())
-    3.0 = int(input())
-    a = 3
-    b = 3
+    a = int(input())
+    b = int(input())
+    print("somando 2 no a")
+    a += 2
+    print(a)
     fazoele = 123.34
+    print(fazoele)
     palavra = "Abacaxi"
     print("oi")
     print(palavra)
     if a == b:
         print("a igual b")
+
     else:
         print("a eh diferente de  b")
-    print(a)
-    a = 4
-    print(b)
-    a = 4
+
     while a < b:
         print(a)
         a = 4
+    print(" ------------ ")
+    print("Teste do DoWhile")
+    print(a)
+    print(b)
     while True:
-        print("Fazendo oq ta nesse trem aqui me mandando fazer")
-        a = 0
-        if not (a==b):
+        a += 1
+        print(a)
+        if not (a<10):
             break
 
 if __name__ == '__main__':

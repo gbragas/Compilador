@@ -4,11 +4,16 @@ programa program
     inicio
         read(a);
         read(b);
-        a = 3;
-        b = 3;
+        
+        write("somando 2 no a");
+        a += 2;
+        write(a);
         
         fazoele = 123.34;
-        palavra = "Abacaxi";      
+        write(fazoele);
+        palavra = "Abacaxi";  
+         
+        
         
         write("oi");
         write(palavra);
@@ -21,24 +26,27 @@ programa program
  
         }
         
-        write(a);
-        a=4 ;
-        write(b);
-        a=4 ;
+        
+
         enquanto ( a < b ) {
         	
         	write(a);
         	a=4 ;
         }
         
+        write(" ------------ ");
+        write("Teste do DoWhile");
+        write(a);
+        write(b);
         
         faça {
         	
-        	write("Fazendo oq ta nesse trem aqui me mandando fazer");
-        	a = 0;    	
+        
+        	a += 1;  
+        	write(a);
         	
         	
-        } enquanto( a == b );
+        } enquanto( a < 10 );
         
     fim
 fimprog

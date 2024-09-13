@@ -52,14 +52,14 @@ public class ReadCommand extends Command {
                 // Lê a entrada como String e converte para double
                 String inputValue = scanner.nextLine();
                 double doubleValue = Double.parseDouble(inputValue);
-                var.setId(String.valueOf(doubleValue));  // Valor como String
+                var.setValue(String.valueOf(doubleValue));  // Valor como String
             } catch (NumberFormatException e) {
                 System.out.println("Invalid input for NUMBER type.");
             }
         } else {
             // Lê a entrada como String
             String inputValue = scanner.nextLine();
-            var.setId(inputValue);  // Valor como String
+            var.setValue(inputValue);  // Valor como String
         }
     }
 }

@@ -28,4 +28,13 @@ public class ReadCommand extends Command {
     public String generateTarget() {
         return var.getId() + " = " + ((var.getType() == Types.NUMBER)?"_scTrx.nextInt();\n" : "_scTrx.nextLine();\n");
     }
+    
+    @Override
+    public String generatePythonCode() {
+        if (var.getType() == Types.NUMBER) {
+            return var.getId() + " = int(input())\n";  
+        } else {
+            return var.getId() + " = input()\n";  
+        }
+    }
 }

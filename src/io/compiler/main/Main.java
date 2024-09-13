@@ -30,12 +30,25 @@ public class Main {
             Program program = parser.getProgram();
 
             System.out.println(program.generateTarget());
+            
 
             try {
                 File f = new File(program.getName()+".java");
                 FileWriter fw = new FileWriter(f);
                 PrintWriter pw = new PrintWriter(fw);
                 pw.println(program.generateTarget());
+                pw.close();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+                        
+            System.out.println(program.generatePythonCode());
+            try {
+                File f = new File(program.getName()+".py");
+                FileWriter fw = new FileWriter(f);
+                PrintWriter pw = new PrintWriter(fw);
+                pw.println(program.generatePythonCode());
                 pw.close();
 
             } catch (Exception e) {

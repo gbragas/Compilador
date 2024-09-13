@@ -18,6 +18,11 @@ grammar Grammar;
     private Stack<ArrayList<Command>> stack = new Stack<ArrayList<Command>>();
     private String strExpr = "";
     private IfCommand currentIfCommand;
+    private WhileCommand currentWhileCommand;
+    private DoWhileCommand currentDoWhileCommand;
+    private AttributionCommand currentAttributionCommand;
+    
+    
 
     public void updateType() {
         for (Var v: currentDecl) {
@@ -39,6 +44,13 @@ grammar Grammar;
     public boolean isDeclared(String id) {
         return symbolTable.get(id) != null;
     }
+    
+    public boolean isTypeCompatible(Types leftType, Types rightType) {
+    if (leftType == Types.NUMBER && rightType == Types.TEXT) {
+        return false;
+    }
+    return true;
+}
 }
 
 
@@ -70,7 +82,46 @@ comando     : cmdAttrib
             | cmdRead
             | cmdWrite
             | cmdIf
+            | cmdWhile
+            | cmdDoWhile
             ;
+            
+            
+cmdDoWhile       : 'faça' {
+                        stack.push(new ArrayList<Command>());
+                        strExpr = "";
+                        currentDoWhileCommand = new DoWhileCommand();
+                   }
+            AC
+            comando+ { currentDoWhileCommand.setCommandList(stack.pop()); } 
+            FC 
+            'enquanto' 
+            AP
+            expr {currentDoWhileCommand.setExpressiL(_input.LT(-1).getText());}
+            OP_REL {currentDoWhileCommand.setOperation(_input.LT(-1).getText());}
+            expr {currentDoWhileCommand.setExpressiR(_input.LT(-1).getText());}
+            FP 
+            PV { stack.peek().add(currentDoWhileCommand); }
+            ;    
+            
+
+cmdWhile       : 'enquanto' {
+                        stack.push(new ArrayList<Command>());
+                        strExpr = "";
+                        currentWhileCommand = new WhileCommand();
+                   }
+            AP
+            expr
+            OP_REL { strExpr += " "+ _input.LT(-1).getText() + " "; }
+            expr
+            FP { currentWhileCommand.setExpression(strExpr); }
+            AC
+            comando+ { currentWhileCommand.setCommandList(stack.pop()); }          
+            FC { stack.peek().add(currentWhileCommand); }
+            ;
+
+
+
 
 cmdIf       : 'if' {
                         stack.push(new ArrayList<Command>());
@@ -79,7 +130,7 @@ cmdIf       : 'if' {
                    }
             AP
             expr
-            OP_REL { strExpr += _input.LT(-1).getText(); }
+            OP_REL { strExpr += " "+ _input.LT(-1).getText() + " "; }
             expr
             FP { currentIfCommand.setExpression(strExpr); }
             AC
@@ -91,23 +142,37 @@ cmdIf       : 'if' {
             FC )? { stack.peek().add(currentIfCommand); }
             ;
 
-cmdAttrib   : ID { if (!isDeclared(_input.LT(-1).getText())) {
-                       throw new SemanticException("Undeclared Variable: " + _input.LT(-1).getText());
-                   }
-                   symbolTable.get(_input.LT(-1).getText()).setInitialized(true);
-                   leftType = symbolTable.get(_input.LT(-1).getText()).getType();
-                 }
-              OP_AT
-              expr
-              PV
-              {
-                System.out.println("Left Side Expression Type: " +leftType);
-                System.out.println("Right Side Expression Type: " +rightType);
-                if (leftType.getValue() < rightType.getValue()) {
-                       throw new SemanticException("Type Missmatching on Assignment");
-                }
-              }
-            ;
+cmdAttrib : ID 
+    {
+        if (!isDeclared(_input.LT(-1).getText())) {
+            throw new SemanticException("Undeclared Variable: " + _input.LT(-1).getText());
+        }
+        
+                
+        currentAttributionCommand = new AttributionCommand();
+        symbolTable.get(_input.LT(-1).getText()).setInitialized(true);
+        leftType = symbolTable.get(_input.LT(-1).getText()).getType();
+        
+        currentAttributionCommand.setVariable(_input.LT(-1).getText()); // Set variavel
+    } 
+    OP_AT 
+    {
+        currentAttributionCommand.setOperation(_input.LT(-1).getText()); // Set operador
+    } 
+    expr 
+    {
+    	currentAttributionCommand.setValue(_input.LT(-1).getText()); // Set valor atribuido
+    }
+    PV 
+    {
+        
+        stack.peek().add(currentAttributionCommand);
+        //System.out.println("Left Side Expression Type: " + leftType);
+        //System.out.println("Right Side Expression Type: " + rightType);
+        if (leftType.getValue() < rightType.getValue()) {
+            throw new SemanticException("Type Missmatching on Assignment");
+        }
+    };
 
 cmdRead     : 'read' AP
                ID { if (!isDeclared(_input.LT(-1).getText())) {
@@ -130,7 +195,7 @@ cmdWrite    : 'write' AP
             FP PV { rightType = null; }
             ;
 
-expr        : termo { strExpr += _input.LT(-1).getText(); } exprl
+expr        : termo { strExpr +=  _input.LT(-1).getText(); } exprl
             ;
 
 termo       : ID { if (!isDeclared(_input.LT(-1).getText())) {
@@ -168,7 +233,7 @@ termo       : ID { if (!isDeclared(_input.LT(-1).getText())) {
             ;
 
 exprl       : (
-                OP { strExpr += _input.LT(-1).getText(); }
+                OP { strExpr += " "+ _input.LT(-1).getText() + " "; }
                 termo { strExpr += _input.LT(-1).getText(); }
               ) *
             ;

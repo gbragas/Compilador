@@ -4,11 +4,6 @@ public class WriteCommand extends Command {
 
     private String content;
 
-    @Override
-    public String generateTarget() {
-        return "System.out.println("+content+");\n";
-    }
-
     public String getContent() {
         return content;
     }
@@ -24,5 +19,15 @@ public class WriteCommand extends Command {
 
     public WriteCommand() {
         super();
+    }
+    
+    @Override
+    public String generateTarget() {
+        return "System.out.println("+content+");\n";
+    }
+    
+    @Override
+    public String generatePythonCode() {
+        return "print(" + content + ")\n";
     }
 }

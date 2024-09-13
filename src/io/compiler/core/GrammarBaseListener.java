@@ -7,6 +7,10 @@ package io.compiler.core;
     import io.compiler.types.*;
     import io.compiler.core.exceptions.*;
     import io.compiler.core.ast.*;
+   	import io.compiler.runtime.*;
+   	import io.compiler.expressionevaluator.*;
+   	
+    
 
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -145,13 +149,13 @@ public class GrammarBaseListener implements GrammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterTermo(GrammarParser.TermoContext ctx) { }
+	@Override public void enterFator(GrammarParser.FatorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitTermo(GrammarParser.TermoContext ctx) { }
+	@Override public void exitFator(GrammarParser.FatorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -164,6 +168,30 @@ public class GrammarBaseListener implements GrammarListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitExprl(GrammarParser.ExprlContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterTermo(GrammarParser.TermoContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitTermo(GrammarParser.TermoContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterTermol(GrammarParser.TermolContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitTermol(GrammarParser.TermolContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

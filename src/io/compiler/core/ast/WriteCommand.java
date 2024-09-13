@@ -1,5 +1,8 @@
 package io.compiler.core.ast;
 
+import io.compiler.runtime.Context;
+import io.compiler.types.Var;
+
 public class WriteCommand extends Command {
 
     private String content;
@@ -30,4 +33,12 @@ public class WriteCommand extends Command {
     public String generatePythonCode() {
         return "print(" + content + ")\n";
     }
+
+    @Override
+    public void execute(Context context) {
+       
+            System.out.println(context.evaluateExpression(content));
+        
+    }
+
 }

@@ -4,22 +4,21 @@ programa program
     inicio
         read(a);
         read(b);
-        a = 2;
-        b=3;
-        a=b;
+        a = 3;
+        b = 3;
+        
         fazoele = 123.34;
         palavra = "Abacaxi";      
         
         write("oi");
+        write(palavra);
 
-        if (a + 5 < b - 6 -2 +10) {
-            write(a);
-            
-            a=4 ;
+        if (a == b) {
+            write("a igual b");
+
         } else {
-            write(b);
-            a=4 ;
-            a=4 ;
+            write("a eh diferente de  b");
+ 
         }
         
         write(a);
@@ -34,10 +33,12 @@ programa program
         
         
         faça {
-        	a=4 ;
-        	write(b);
-        	a=4 ;
-        } enquanto( a == b);
+        	
+        	write("Fazendo oq ta nesse trem aqui me mandando fazer");
+        	a = 0;    	
+        	
+        	
+        } enquanto( a == b );
         
     fim
 fimprog

@@ -7,6 +7,10 @@ grammar Grammar;
     import io.compiler.types.*;
     import io.compiler.core.exceptions.*;
     import io.compiler.core.ast.*;
+   	import io.compiler.runtime.*;
+   	import io.compiler.expressionevaluator.*;
+   	
+    
 }
 
 @members {
@@ -22,6 +26,27 @@ grammar Grammar;
     private DoWhileCommand currentDoWhileCommand;
     private AttributionCommand currentAttributionCommand;
     private Warning warning;
+    
+    
+ 	private Stack<AbstractExpression> stackExpression = new Stack<AbstractExpression>();
+	private AbstractExpression topo = null;
+	
+    public double generateValue(){
+       if (topo == null){
+          topo = stackExpression.pop();
+       }
+       return topo.evaluate();
+    }
+    
+    public String generateJSON(){
+    	if (topo == null){
+          topo = stackExpression.pop();
+       }
+       return topo.toJson();
+    }
+    
+    
+    
     
     
 
@@ -207,15 +232,19 @@ cmdWrite    : 'write' AP
             FP PV { rightType = null; }
             ;
 
-expr        : termo { strExpr +=  _input.LT(-1).getText(); } exprl
+expr        : termo { strExpr +=  _input.LT(-1).getText(); } exprl 
             ;
 
-termo       : ID { if (!isDeclared(_input.LT(-1).getText())) {
+fator       : ID { if (!isDeclared(_input.LT(-1).getText())) {
                         throw new SemanticException("Undeclared Variable: " + _input.LT(-1).getText());
                     }
                     if (!symbolTable.get(_input.LT(-1).getText()).isInitialized()) {
                          throw new SemanticException("Variable: " + _input.LT(-1).getText() +" has no value assigned");
                     }
+                    
+                    
+
+                    
                     
                     
                     if (rightType == null) {
@@ -236,6 +265,11 @@ termo       : ID { if (!isDeclared(_input.LT(-1).getText())) {
                             rightType = Types.NUMBER;
                         }
                     }
+                    
+                    UnaryExpression element = new UnaryExpression(Double.parseDouble(_input.LT(-1).getText()));
+                 	stackExpression.push(element);
+
+                    
                   }
             | TEXTO {
                         if (rightType == null) {
@@ -249,13 +283,69 @@ termo       : ID { if (!isDeclared(_input.LT(-1).getText())) {
             ;
 
 exprl       : (
-                OP { strExpr += " "+ _input.LT(-1).getText() + " "; }
-                termo { strExpr += _input.LT(-1).getText(); }
+                (OP_SUM | OP_SUB) 
+                {
+                   strExpr += " "+ _input.LT(-1).getText() + " "; 		
+                   	                 
+	               BinaryExpression bin = new BinaryExpression(_input.LT(-1).getText().charAt(0));
+	               bin.setLeft(stackExpression.pop());
+	               stackExpression.push(bin);           
+				}
+                termo 
+                { 
+                	strExpr += _input.LT(-1).getText(); 
+                	
+                	AbstractExpression topo = stackExpression.pop(); // desempilhei o termo
+		         	BinaryExpression root = (BinaryExpression) stackExpression.pop(); // preciso do componente binário
+		         	root.setRight(topo);
+		         	stackExpression.push(root);
+                
+                }
               ) *
             ;
+            
+            
+termo	: fator	termol
+		;
+		
+termol	: ((OP_MUL | OP_DIV) {
+			 BinaryExpression bin = new BinaryExpression(_input.LT(-1).getText().charAt(0));
+			 if (stackExpression.peek() instanceof UnaryExpression) { // o que tem no topo é um operador "simples"
+			 	bin.setLeft(stackExpression.pop()); // desempilho já tornando ele filho da multiplicacao
+			 }
+			 else{
+			    BinaryExpression father = (BinaryExpression)stackExpression.pop();
+			    if (father.getOperation() == '-' || father.getOperation() == '+'){
+			    	bin.setLeft(father.getRight());
+			    	father.setRight(bin);
+			    }
+			    else{
+			        bin.setLeft(father);
+			        stackExpression.push(bin);			       
+			    }
+			 }        
+          }          
+          fator {
+             bin.setRight(stackExpression.pop());
+             stackExpression.push(bin);
+             System.out.println("DEBUG - :" + bin.toJson());
+          }
 
-OP          : '+' | '-'| '*' | '/'
-            ;
+          )*		
+		;
+
+
+OP_SUM	: '+'
+		;
+		
+OP_SUB	: '-'
+		;
+
+OP_MUL	: '*'
+		;
+		
+OP_DIV	: '/'
+		;
 
 OP_AT       : '='
             ;

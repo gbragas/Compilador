@@ -5,6 +5,8 @@ import io.compiler.core.GrammarParser;
 import io.compiler.core.ast.Program;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
+import io.compiler.runtime.*;
+import io.compiler.runtime.Runtime;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -28,8 +30,11 @@ public class Main {
             //parser.getVars();
 
             Program program = parser.getProgram();
-
+            Runtime runtime = new Runtime(program.getSymbolTable(), program.getCommandList());
+            runtime.run();
+            
             System.out.println(program.generateTarget());
+            System.out.println("Resultado ultima conta: "+ parser.generateValue());
             
 
             try {

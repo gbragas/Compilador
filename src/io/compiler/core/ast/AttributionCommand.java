@@ -1,5 +1,9 @@
 package io.compiler.core.ast;
 
+import io.compiler.runtime.Context;
+import io.compiler.types.Types;
+import io.compiler.types.Var;
+
 public class AttributionCommand extends Command {
 
     private String variable;
@@ -50,4 +54,29 @@ public class AttributionCommand extends Command {
 	public String generatePythonCode() {
     	return variable + " " + operation + " " + value + "\n";
 	}
+
+    @Override
+    public void execute(Context context) {
+        // Verifica se a variável existe no contexto
+        if (context.containsVariable(variable)) {
+            Var var = context.getVariable(variable);
+            
+            // avalia valor a ser atribuído
+            Object evaluatedValue = context.evaluateExpression(value);
+            
+           
+            if (var.getType() == Types.NUMBER && evaluatedValue instanceof Double) {
+                var.setId(String.valueOf(evaluatedValue));
+            } else if (var.getType() == Types.TEXT && evaluatedValue instanceof String) {
+                var.setId((String) evaluatedValue);
+            } else {
+                throw new RuntimeException("Tipo de valor incompatível com o tipo da variável.");
+            }
+            System.out.println("VARIAVEL: "+variable+ " valor: "+ value + " ATRIBUIDA"+var.getId());
+        } else {
+            throw new RuntimeException("Variável '" + variable + "' não declarada.");
+        }
+        
+
+    }
 }

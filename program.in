@@ -3,13 +3,40 @@ programa program
     inicio
         read(a);
         read(b);
-        write(a);
+        a = 2;
+        b=3;
+        a=b;
+        
+        
+        
         write("oi");
 
         if (a + 5 < b - 6) {
             write(a);
+            a=4 ;
+            a=4 ;
         } else {
             write(b);
+            a=4 ;
+            a=4 ;
         }
+        
+        write(a);
+        a=4 ;
+        write(b);
+        a=4 ;
+        enquanto ( a < b ) {
+        	
+        	write(a);
+        	a=4 ;
+        }
+        
+        
+        faça {
+        	a=4 ;
+        	write(b);
+        	a=4 ;
+        } enquanto( a == b);
+        
     fim
 fimprog

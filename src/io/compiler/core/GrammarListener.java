@@ -46,6 +46,26 @@ public interface GrammarListener extends ParseTreeListener {
 	 */
 	void exitComando(GrammarParser.ComandoContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link GrammarParser#cmdDoWhile}.
+	 * @param ctx the parse tree
+	 */
+	void enterCmdDoWhile(GrammarParser.CmdDoWhileContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link GrammarParser#cmdDoWhile}.
+	 * @param ctx the parse tree
+	 */
+	void exitCmdDoWhile(GrammarParser.CmdDoWhileContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link GrammarParser#cmdWhile}.
+	 * @param ctx the parse tree
+	 */
+	void enterCmdWhile(GrammarParser.CmdWhileContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link GrammarParser#cmdWhile}.
+	 * @param ctx the parse tree
+	 */
+	void exitCmdWhile(GrammarParser.CmdWhileContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link GrammarParser#cmdIf}.
 	 * @param ctx the parse tree
 	 */

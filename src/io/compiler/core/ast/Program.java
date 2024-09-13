@@ -38,7 +38,7 @@ public class Program {
         StringBuilder str = new StringBuilder();
         str.append("import java.util.Scanner;\n");
         str.append("public class ").append(name).append(" {\n");
-        str.append("    public class void main(String[] args) {\n");
+        str.append("    public static void main(String[] args) {\n");
         str.append("        Scanner _scTrx = new Scanner(System.in);\n");
         for (String varId : symbolTable.keySet()) {
             Var var = symbolTable.get(varId);
@@ -56,6 +56,30 @@ public class Program {
         }
         str.append("    }\n");
         str.append("}");
+
+        return str.toString();
+    }
+    
+    
+    public String generatePythonCode() {
+        StringBuilder str = new StringBuilder();
+        str.append("# Código Python gerado\n\n");
+        str.append("def main():\n");
+        for (String varId : symbolTable.keySet()) {
+            Var var = symbolTable.get(varId);
+            str.append("    ");
+            if (var.getType() == Types.NUMBER) {
+                str.append(var.getId()).append(" = 0\n");  // Inicializa variáveis numéricas com 0
+            } else {
+                str.append(var.getId()).append(" = ''\n");  // Inicializa variáveis de texto com string vazia
+            }
+        }
+
+        for (Command command : commandList) {
+            str.append("    ").append(command.generatePythonCode());
+        }
+        str.append("\nif __name__ == '__main__':\n");
+        str.append("    main()\n");
 
         return str.toString();
     }

@@ -52,10 +52,9 @@ public class IfCommand extends Command {
     public String generateTarget() {
         StringBuilder str = new StringBuilder();
         str.append("if (").append(expression).append(") {\n");
-        str.append("            ");
 
         for (Command cmd : trueList) {
-            str.append(cmd.generateTarget());
+            str.append("            ").append(cmd.generateTarget());
         }
         str.append("        }\n");
 
@@ -64,9 +63,28 @@ public class IfCommand extends Command {
             str.append("else {\n");
             str.append("            ");
             for (Command cmd : falseList) {
-                str.append(cmd.generateTarget());
+                str.append("            ").append(cmd.generateTarget());
             }
             str.append("        }\n");
+        }
+
+        return str.toString();
+    }
+
+    @Override
+    public String generatePythonCode() {
+        StringBuilder str = new StringBuilder();
+        str.append("if ").append(expression).append(":\n");
+
+        for (Command cmd : trueList) {
+            str.append("        ").append(cmd.generatePythonCode());
+        }
+
+        if (!falseList.isEmpty()) {
+            str.append("    else:\n");
+            for (Command cmd : falseList) {
+                str.append("        ").append(cmd.generatePythonCode());
+            }
         }
 
         return str.toString();

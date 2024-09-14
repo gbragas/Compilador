@@ -6,11 +6,16 @@ def main():
     b = 0
     fazoele = 0
     c = 0
+    d = 0
+    palavra = input()
+    print(palavra)
     a = int(input())
     b = int(input())
     print("somando 2 no a")
     a += 2
     print(a)
+    print("")
+    print("")
     fazoele = 123.34
     print(fazoele)
     palavra = "Abacaxi"
@@ -22,11 +27,20 @@ def main():
     else:
         print("a eh diferente de  b")
 
-    while a < b:
+    a = 4
+    b = 10
+    print("Teste do While Printando a ate b")
+    print("a vale:")
+    print(a)
+    print("b vale:")
+    print(b)
+    print("--- Inicio do teste While ---")
+    while a<=b:
         print(a)
-        a = 4
-    print(" ------------ ")
-    print("Teste do DoWhile")
+        a += 1
+    print("--- FEIN ---")
+    print(" ------------------ ")
+    print("Teste do Do-While Printando 4 a 10")
     print(a)
     print(b)
     while True:

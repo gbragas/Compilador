@@ -44,11 +44,6 @@ grammar Grammar;
        }
        return topo.toJson();
     }
-    
-    
-    
-    
-    
 
     public void updateType() {
         for (Var v: currentDecl) {
@@ -80,16 +75,15 @@ grammar Grammar;
 }
 
 
-programa    : 'programa' ID { program.setName(_input.LT(-1).getText());
+programa    : '🚀BoraBill' ID { program.setName(_input.LT(-1).getText());
                               stack.push(new ArrayList<Command>());
                                Warning warning = new Warning();
-                              
                             }
                declararvar+
-               'inicio'
+               'JaVaiComecar'
                comando+
-               'fim'
-               'fimprog' {
+               'JaVaiTermina'
+               'AcabouBill' {
                     program.setSymbolTable(symbolTable);
                     program.setCommandList(stack.pop());
                     for (String varId : symbolTable.keySet()) {
@@ -102,7 +96,7 @@ programa    : 'programa' ID { program.setName(_input.LT(-1).getText());
                 }
             ;
 
-declararvar : 'declare' { currentDecl.clear(); }
+declararvar : 'Apareca' { currentDecl.clear(); }
                ID { currentDecl.add(new Var(_input.LT(-1).getText())); }
                ( VG ID
                     { currentDecl.add(new Var(_input.LT(-1).getText())); }
@@ -122,7 +116,7 @@ comando     : cmdAttrib
             ;
             
             
-cmdDoWhile       : 'faça' {
+cmdDoWhile       : 'Obedeca' {
                         stack.push(new ArrayList<Command>());
                         strExpr = "";
                         currentDoWhileCommand = new DoWhileCommand();
@@ -130,7 +124,7 @@ cmdDoWhile       : 'faça' {
             AC
             comando+ { currentDoWhileCommand.setCommandList(stack.pop()); } 
             FC 
-            'enquanto' 
+            'Enquanto' 
             AP
             expr {currentDoWhileCommand.setExpressiL(_input.LT(-1).getText());}
             OP_REL {currentDoWhileCommand.setOperation(_input.LT(-1).getText());}
@@ -140,16 +134,16 @@ cmdDoWhile       : 'faça' {
             ;    
             
 
-cmdWhile       : 'enquanto' {
+cmdWhile       : 'Enquanto' {
                         stack.push(new ArrayList<Command>());
                         strExpr = "";
                         currentWhileCommand = new WhileCommand();
                    }
             AP
-            expr
-            OP_REL { strExpr += " "+ _input.LT(-1).getText() + " "; }
-            expr
-            FP { currentWhileCommand.setExpression(strExpr); }
+            expr {currentWhileCommand.setExpressionL(_input.LT(-1).getText());}
+            OP_REL {currentWhileCommand.setOperation(_input.LT(-1).getText());}
+            expr {currentWhileCommand.setExpressionR(_input.LT(-1).getText());}
+            FP 
             AC
             comando+ { currentWhileCommand.setCommandList(stack.pop()); }          
             FC { stack.peek().add(currentWhileCommand); }
@@ -158,7 +152,7 @@ cmdWhile       : 'enquanto' {
 
 
 
-cmdIf       : 'if' {
+cmdIf       : 'Eclipse' {
                         stack.push(new ArrayList<Command>());
                         strExpr = "";
                         currentIfCommand = new IfCommand();
@@ -171,7 +165,7 @@ cmdIf       : 'if' {
             AC
             comando+ { currentIfCommand.setTrueList(stack.pop()); }
             FC (
-            'else' { stack.push(new ArrayList<Command>()); }
+            'Engana' { stack.push(new ArrayList<Command>()); }
             AC
             comando+ { currentIfCommand.setFalseList(stack.pop()); }
             FC )? { stack.peek().add(currentIfCommand); }
@@ -201,8 +195,9 @@ cmdAttrib : ID
     }
     PV 
     {
-        
+    
         stack.peek().add(currentAttributionCommand);
+        
         //System.out.println("Left Side Expression Type: " + leftType);
         //System.out.println("Right Side Expression Type: " + rightType);
         if (!isTypeCompatible(leftType,rightType)) {
@@ -210,7 +205,7 @@ cmdAttrib : ID
         }
     };
 
-cmdRead     : 'read' AP
+cmdRead     : 'Receba' AP
                ID { if (!isDeclared(_input.LT(-1).getText())) {
                          throw new SemanticException("Undeclared Variable: " + _input.LT(-1).getText());
                      }
@@ -222,7 +217,7 @@ cmdRead     : 'read' AP
                FP PV
             ;
 
-cmdWrite    : 'write' AP
+cmdWrite    : 'Devolva' AP
             (
             termo {
                     Command cmdWrite = new WriteCommand(_input.LT(-1).getText());
@@ -242,11 +237,7 @@ fator       : ID { if (!isDeclared(_input.LT(-1).getText())) {
                          throw new SemanticException("Variable: " + _input.LT(-1).getText() +" has no value assigned");
                     }
                     
-                    
-
-                    
-                    
-                    
+ 
                     if (rightType == null) {
                         rightType = symbolTable.get(_input.LT(-1).getText()).getType();
                     } else {
@@ -282,57 +273,69 @@ fator       : ID { if (!isDeclared(_input.LT(-1).getText())) {
                     }
             ;
 
-exprl       : (
-                (OP_SUM | OP_SUB) 
-                {
-                   strExpr += " "+ _input.LT(-1).getText() + " "; 		
-                   	                 
-	               BinaryExpression bin = new BinaryExpression(_input.LT(-1).getText().charAt(0));
-	               bin.setLeft(stackExpression.pop());
-	               stackExpression.push(bin);           
-				}
-                termo 
-                { 
-                	strExpr += _input.LT(-1).getText(); 
-                	
-                	AbstractExpression topo = stackExpression.pop(); // desempilhei o termo
-		         	BinaryExpression root = (BinaryExpression) stackExpression.pop(); // preciso do componente binário
-		         	root.setRight(topo);
-		         	stackExpression.push(root);
-                
-                }
-              ) *
-            ;
-            
-            
+exprl : ( (OP_SUM | OP_SUB) {
+               strExpr += " " + _input.LT(-1).getText() + " "; 		
+               BinaryExpression bin = new BinaryExpression(_input.LT(-1).getText().charAt(0));
+               
+               if (stackExpression.peek() instanceof BinaryExpression && stackExpression.size() > 1) {
+                   BinaryExpression prev = (BinaryExpression)stackExpression.pop();
+                   if (prev.getOperation() == '*' || prev.getOperation() == '/') {
+                       prev.setRight(stackExpression.pop());
+                       stackExpression.push(prev);
+                   }
+                   bin.setLeft(stackExpression.pop());
+               } else {
+                   bin.setLeft(stackExpression.pop());
+               }
+               stackExpression.push(bin);
+            }
+            termo {
+               strExpr += _input.LT(-1).getText();
+               if (stackExpression.size() > 1) {
+    AbstractExpression rightExpr = stackExpression.pop();
+    BinaryExpression temp = (BinaryExpression) stackExpression.pop();
+    temp.setRight(rightExpr);
+    stackExpression.push(temp);
+} else {
+    throw new RuntimeException("Error: Not enough operands for binary operation.");
+}
+
+            }
+         )*
+       ;
+
+
+                  
 termo	: fator	termol
 		;
 		
-termol	: ((OP_MUL | OP_DIV) {
-			 BinaryExpression bin = new BinaryExpression(_input.LT(-1).getText().charAt(0));
-			 if (stackExpression.peek() instanceof UnaryExpression) { // o que tem no topo é um operador "simples"
-			 	bin.setLeft(stackExpression.pop()); // desempilho já tornando ele filho da multiplicacao
-			 }
-			 else{
-			    BinaryExpression father = (BinaryExpression)stackExpression.pop();
-			    if (father.getOperation() == '-' || father.getOperation() == '+'){
-			    	bin.setLeft(father.getRight());
-			    	father.setRight(bin);
-			    }
-			    else{
-			        bin.setLeft(father);
-			        stackExpression.push(bin);			       
-			    }
-			 }        
-          }          
-          fator {
+termol : ((OP_MUL | OP_DIV) {
+             // Cria uma nova expressão binária
+             BinaryExpression bin = new BinaryExpression(_input.LT(-1).getText().charAt(0));
+             
+             // Se o topo da pilha é uma expressão simples (UnaryExpression), faça com que ela seja o lado esquerdo
+             if (stackExpression.peek() instanceof UnaryExpression) {
+                 bin.setLeft(stackExpression.pop()); // desempilha o lado esquerdo
+             } else {
+                 BinaryExpression prev = (BinaryExpression)stackExpression.pop();
+                 if (prev.getOperation() == '+' || prev.getOperation() == '-') {
+                     // Se a operação anterior era + ou -, faça o encadeamento correto
+                     bin.setLeft(prev.getRight());
+                     prev.setRight(bin);
+                     stackExpression.push(prev); // coloca a operação ajustada de volta na pilha
+                 } else {
+                     bin.setLeft(prev); // senão, continua normalmente
+                 }
+             }
+         }
+         fator {
+             // Define o lado direito e empilha o binário completo
              bin.setRight(stackExpression.pop());
              stackExpression.push(bin);
-             System.out.println("DEBUG - :" + bin.toJson());
-          }
+         }
+         )*
+       ;
 
-          )*		
-		;
 
 
 OP_SUM	: '+'

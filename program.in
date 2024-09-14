@@ -1,52 +1,76 @@
-programa program
-    declare a, b, c, fazoele: number;
-    declare palavra: text;
-    inicio
-        read(a);
-        read(b);
+🚀BoraBill program
+    Apareca a, b, c , d, fazoele: number;
+    Apareca palavra: text;
+    JaVaiComecar
+    
+    	Receba(palavra);
+    	Devolva(palavra);
+    
+        Receba(a);
+        Receba(b);
         
-        write("somando 2 no a");
+        Devolva("somando 2 no a");
         a += 2;
-        write(a);
+       
         
+       
+        
+        Devolva(a);
+        Devolva("");
+        
+        
+        Devolva("");
         fazoele = 123.34;
-        write(fazoele);
+        Devolva(fazoele);
         palavra = "Abacaxi";  
          
-        
-        
-        write("oi");
-        write(palavra);
+       
+        Devolva("oi");
+        Devolva(palavra);
 
-        if (a == b) {
-            write("a igual b");
+        Eclipse (a == b) {
+        
+            Devolva("a igual b");
 
-        } else {
-            write("a eh diferente de  b");
+        } Engana {
+        
+            Devolva("a eh diferente de  b");
  
         }
         
         
-
-        enquanto ( a < b ) {
+        
+        a = 4;
+        b=10;
+		Devolva("Teste do While Printando a ate b");
+		Devolva("a vale:");
+		Devolva(a);
+		Devolva("b vale:");
+        Devolva(b);
+       	Devolva("--- Inicio do teste While ---");
+        
+        Enquanto ( a <= b ) {
         	
-        	write(a);
-        	a=4 ;
+        	Devolva(a);
+        	a +=1;
+        	
         }
         
-        write(" ------------ ");
-        write("Teste do DoWhile");
-        write(a);
-        write(b);
+        Devolva("--- FEIN ---");
         
-        faça {
+        Devolva(" ------------------ ");
+        Devolva("Teste do Do-While Printando 4 a 10");
+        Devolva(a);
+        Devolva(b);
+        
+        Obedeca {
         	
         
         	a += 1;  
-        	write(a);
+        	Devolva(a);
         	
         	
-        } enquanto( a < 10 );
+        } Enquanto( a < 10 );
         
-    fim
-fimprog
+    JaVaiTermina
+AcabouBill

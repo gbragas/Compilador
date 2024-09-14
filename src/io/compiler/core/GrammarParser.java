@@ -140,11 +140,6 @@ public class GrammarParser extends Parser {
 	       }
 	       return topo.toJson();
 	    }
-	    
-	    
-	    
-	    
-	    
 
 	    public void updateType() {
 	        for (Var v: currentDecl) {
@@ -222,7 +217,6 @@ public class GrammarParser extends Parser {
 			 program.setName(_input.LT(-1).getText());
 			                              stack.push(new ArrayList<Command>());
 			                               Warning warning = new Warning();
-			                              
 			                            
 			setState(32); 
 			_errHandler.sync(this);
@@ -850,9 +844,11 @@ public class GrammarParser extends Parser {
 			setState(157);
 			match(PV);
 
-			        
-			        stack.peek().add(currentAttributionCommand);
+			    
 			        System.out.println("Resultado ultima conta: "+ generateValue());
+			        currentAttributionCommand.setResult(generateValue());
+			        stack.peek().add(currentAttributionCommand);
+			        
 			        //System.out.println("Left Side Expression Type: " + leftType);
 			        //System.out.println("Right Side Expression Type: " + rightType);
 			        if (!isTypeCompatible(leftType,rightType)) {
@@ -1190,22 +1186,35 @@ public class GrammarParser extends Parser {
 					consume();
 				}
 
-				                   strExpr += " "+ _input.LT(-1).getText() + " "; 		
-				                   
-				                   BinaryExpression bin = new BinaryExpression(_input.LT(-1).getText().charAt(0));
-				                   bin.setLeft(stackExpression.pop()); // Empilhar o lado esquerdo
-				                   stackExpression.push(bin); // Colocar a operação binária na pilha
-				                
+				               strExpr += " " + _input.LT(-1).getText() + " "; 		
+				               BinaryExpression bin = new BinaryExpression(_input.LT(-1).getText().charAt(0));
+				               
+				               if (stackExpression.peek() instanceof BinaryExpression && stackExpression.size() > 1) {
+				                   BinaryExpression prev = (BinaryExpression)stackExpression.pop();
+				                   if (prev.getOperation() == '*' || prev.getOperation() == '/') {
+				                       prev.setRight(stackExpression.pop());
+				                       stackExpression.push(prev);
+				                   }
+				                   bin.setLeft(stackExpression.pop());
+				               } else {
+				                   bin.setLeft(stackExpression.pop());
+				               }
+				               stackExpression.push(bin);
+				            
 				setState(190);
 				termo();
-				 
-				                	strExpr += _input.LT(-1).getText(); 
-				                	
-				                	AbstractExpression topo = stackExpression.pop(); // Desempilhar o termo
-						         	BinaryExpression root = (BinaryExpression) stackExpression.pop(); // Desempilhar operação binária
-						         	root.setRight(topo); // Atribuir o lado direito
-						         	stackExpression.push(root); // Colocar a operação completa na pilha
-				                
+
+				               strExpr += _input.LT(-1).getText();
+				               if (stackExpression.size() > 1) {
+				    AbstractExpression rightExpr = stackExpression.pop();
+				    BinaryExpression temp = (BinaryExpression) stackExpression.pop();
+				    temp.setRight(rightExpr);
+				    stackExpression.push(temp);
+				} else {
+				    throw new RuntimeException("Error: Not enough operands for binary operation.");
+				}
+
+				            
 				}
 				}
 				setState(197);
@@ -1324,29 +1333,31 @@ public class GrammarParser extends Parser {
 					consume();
 				}
 
-							 BinaryExpression bin = new BinaryExpression(_input.LT(-1).getText().charAt(0));
-							 if (stackExpression.peek() instanceof UnaryExpression) { // o que tem no topo é um operador "simples"
-							 	bin.setLeft(stackExpression.pop()); // desempilho já tornando ele filho da multiplicacao
-							 }
-							 else{
-							    BinaryExpression father = (BinaryExpression)stackExpression.pop();
-							    if (father.getOperation() == '-' || father.getOperation() == '+'){
-							    	bin.setLeft(father.getRight());
-							    	father.setRight(bin);
-							    }
-							    else{
-							        bin.setLeft(father);
-							        stackExpression.push(bin);			       
-							    }
-							 }        
-				          
+				             // Cria uma nova expressão binária
+				             BinaryExpression bin = new BinaryExpression(_input.LT(-1).getText().charAt(0));
+				             
+				             // Se o topo da pilha é uma expressão simples (UnaryExpression), faça com que ela seja o lado esquerdo
+				             if (stackExpression.peek() instanceof UnaryExpression) {
+				                 bin.setLeft(stackExpression.pop()); // desempilha o lado esquerdo
+				             } else {
+				                 BinaryExpression prev = (BinaryExpression)stackExpression.pop();
+				                 if (prev.getOperation() == '+' || prev.getOperation() == '-') {
+				                     // Se a operação anterior era + ou -, faça o encadeamento correto
+				                     bin.setLeft(prev.getRight());
+				                     prev.setRight(bin);
+				                     stackExpression.push(prev); // coloca a operação ajustada de volta na pilha
+				                 } else {
+				                     bin.setLeft(prev); // senão, continua normalmente
+				                 }
+				             }
+				         
 				setState(203);
 				fator();
 
+				             // Define o lado direito e empilha o binário completo
 				             bin.setRight(stackExpression.pop());
 				             stackExpression.push(bin);
-				             
-				          
+				         
 				}
 				}
 				setState(210);

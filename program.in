@@ -2,67 +2,14 @@ programa program
     declare a, b, c , d, fazoele: number;
     declare palavra: text;
     inicio
-        read(a);
-        read(b);
-        
-        write("somando 2 no a");
-        a += 2;
-        write(a);
-        write("");
         
         
-        write("");
-        fazoele = 123.34;
-        write(fazoele);
-        palavra = "Abacaxi";  
+        write("TESTE EXPRESSION");
+         d = 4 + 3 * 10;
          
+         a = 1 + 1;
+        
+        
        
-        write("oi");
-        write(palavra);
-
-        if (a == b) {
-        
-            write("a igual b");
-
-        } else {
-        
-            write("a eh diferente de  b");
- 
-        }
-        
-        
-		write("Teste do While Printando a ate b");
-		write("a vale:");
-		write(a);
-		write("b vale:");
-        write(b);
-       	write("--- Inicio do teste While ---");
-        
-        enquanto ( a <= b ) {
-        	
-        	write(a);
-        	a +=1;
-        	
-        }
-        
-        write("--- FEIN ---");
-        
-        write(" ------------------ ");
-        write("Teste do Do-While Printando 4 a 10");
-        write(a);
-        write(b);
-        
-        faça {
-        	
-        
-        	a += 1;  
-        	write(a);
-        	
-        	
-        } enquanto( a < 10 );
-        
-        d = 4 * 3 + 10;
-        
-        write(d);
     fim
 fimprog

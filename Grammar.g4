@@ -75,15 +75,15 @@ grammar Grammar;
 }
 
 
-programa    : 'programa' ID { program.setName(_input.LT(-1).getText());
+programa    : '🚀BoraBill' ID { program.setName(_input.LT(-1).getText());
                               stack.push(new ArrayList<Command>());
                                Warning warning = new Warning();
                             }
                declararvar+
-               'inicio'
+               'JaVaiComecar'
                comando+
-               'fim'
-               'fimprog' {
+               'JaVaiTermina'
+               'AcabouBill' {
                     program.setSymbolTable(symbolTable);
                     program.setCommandList(stack.pop());
                     for (String varId : symbolTable.keySet()) {
@@ -96,7 +96,7 @@ programa    : 'programa' ID { program.setName(_input.LT(-1).getText());
                 }
             ;
 
-declararvar : 'declare' { currentDecl.clear(); }
+declararvar : 'Apareca' { currentDecl.clear(); }
                ID { currentDecl.add(new Var(_input.LT(-1).getText())); }
                ( VG ID
                     { currentDecl.add(new Var(_input.LT(-1).getText())); }
@@ -116,7 +116,7 @@ comando     : cmdAttrib
             ;
             
             
-cmdDoWhile       : 'faça' {
+cmdDoWhile       : 'Obedeca' {
                         stack.push(new ArrayList<Command>());
                         strExpr = "";
                         currentDoWhileCommand = new DoWhileCommand();
@@ -124,7 +124,7 @@ cmdDoWhile       : 'faça' {
             AC
             comando+ { currentDoWhileCommand.setCommandList(stack.pop()); } 
             FC 
-            'enquanto' 
+            'Enquanto' 
             AP
             expr {currentDoWhileCommand.setExpressiL(_input.LT(-1).getText());}
             OP_REL {currentDoWhileCommand.setOperation(_input.LT(-1).getText());}
@@ -134,7 +134,7 @@ cmdDoWhile       : 'faça' {
             ;    
             
 
-cmdWhile       : 'enquanto' {
+cmdWhile       : 'Enquanto' {
                         stack.push(new ArrayList<Command>());
                         strExpr = "";
                         currentWhileCommand = new WhileCommand();
@@ -152,7 +152,7 @@ cmdWhile       : 'enquanto' {
 
 
 
-cmdIf       : 'if' {
+cmdIf       : 'Eclipse' {
                         stack.push(new ArrayList<Command>());
                         strExpr = "";
                         currentIfCommand = new IfCommand();
@@ -165,7 +165,7 @@ cmdIf       : 'if' {
             AC
             comando+ { currentIfCommand.setTrueList(stack.pop()); }
             FC (
-            'else' { stack.push(new ArrayList<Command>()); }
+            'Engana' { stack.push(new ArrayList<Command>()); }
             AC
             comando+ { currentIfCommand.setFalseList(stack.pop()); }
             FC )? { stack.peek().add(currentIfCommand); }
@@ -196,8 +196,6 @@ cmdAttrib : ID
     PV 
     {
     
-        System.out.println("Resultado ultima conta: "+ generateValue());
-        currentAttributionCommand.setResult(generateValue());
         stack.peek().add(currentAttributionCommand);
         
         //System.out.println("Left Side Expression Type: " + leftType);
@@ -207,7 +205,7 @@ cmdAttrib : ID
         }
     };
 
-cmdRead     : 'read' AP
+cmdRead     : 'Receba' AP
                ID { if (!isDeclared(_input.LT(-1).getText())) {
                          throw new SemanticException("Undeclared Variable: " + _input.LT(-1).getText());
                      }
@@ -219,7 +217,7 @@ cmdRead     : 'read' AP
                FP PV
             ;
 
-cmdWrite    : 'write' AP
+cmdWrite    : 'Devolva' AP
             (
             termo {
                     Command cmdWrite = new WriteCommand(_input.LT(-1).getText());

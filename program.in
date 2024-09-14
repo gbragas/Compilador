@@ -1,15 +1,76 @@
-programa program
-    declare a, b, c , d, fazoele: number;
-    declare palavra: text;
-    inicio
+🚀BoraBill program
+    Apareca a, b, c , d, fazoele: number;
+    Apareca palavra: text;
+    JaVaiComecar
+    
+    	Receba(palavra);
+    	Devolva(palavra);
+    
+        Receba(a);
+        Receba(b);
         
-        
-        write("TESTE EXPRESSION");
-         d = 4 + 3 * 10;
-         
-         a = 1 + 1;
-        
+        Devolva("somando 2 no a");
+        a += 2;
+       
         
        
-    fim
-fimprog
+        
+        Devolva(a);
+        Devolva("");
+        
+        
+        Devolva("");
+        fazoele = 123.34;
+        Devolva(fazoele);
+        palavra = "Abacaxi";  
+         
+       
+        Devolva("oi");
+        Devolva(palavra);
+
+        Eclipse (a == b) {
+        
+            Devolva("a igual b");
+
+        } Engana {
+        
+            Devolva("a eh diferente de  b");
+ 
+        }
+        
+        
+        
+        a = 4;
+        b=10;
+		Devolva("Teste do While Printando a ate b");
+		Devolva("a vale:");
+		Devolva(a);
+		Devolva("b vale:");
+        Devolva(b);
+       	Devolva("--- Inicio do teste While ---");
+        
+        Enquanto ( a <= b ) {
+        	
+        	Devolva(a);
+        	a +=1;
+        	
+        }
+        
+        Devolva("--- FEIN ---");
+        
+        Devolva(" ------------------ ");
+        Devolva("Teste do Do-While Printando 4 a 10");
+        Devolva(a);
+        Devolva(b);
+        
+        Obedeca {
+        	
+        
+        	a += 1;  
+        	Devolva(a);
+        	
+        	
+        } Enquanto( a < 10 );
+        
+    JaVaiTermina
+AcabouBill

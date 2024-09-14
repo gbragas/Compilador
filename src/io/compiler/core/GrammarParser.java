@@ -49,10 +49,11 @@ public class GrammarParser extends Parser {
 
 	private static String[] makeLiteralNames() {
 		return new String[] {
-			null, "'programa'", "'inicio'", "'fim'", "'fimprog'", "'declare'", "'number'", 
-			"'text'", "'fa\\u00E7a'", "'enquanto'", "'if'", "'else'", "'read'", "'write'", 
-			"'+'", "'-'", "'*'", "'/'", null, null, null, null, null, "','", "';'", 
-			"':'", "'('", "')'", "'{'", "'}'"
+			null, "'\\uD83D\uDE80BoraBill'", "'JaVaiComecar'", "'JaVaiTermina'", 
+			"'AcabouBill'", "'Apareca'", "'number'", "'text'", "'Obedeca'", "'Enquanto'", 
+			"'Eclipse'", "'Engana'", "'Receba'", "'Devolva'", "'+'", "'-'", "'*'", 
+			"'/'", null, null, null, null, null, "','", "';'", "':'", "'('", "')'", 
+			"'{'", "'}'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
@@ -845,8 +846,6 @@ public class GrammarParser extends Parser {
 			match(PV);
 
 			    
-			        System.out.println("Resultado ultima conta: "+ generateValue());
-			        currentAttributionCommand.setResult(generateValue());
 			        stack.peek().add(currentAttributionCommand);
 			        
 			        //System.out.println("Left Side Expression Type: " + leftType);

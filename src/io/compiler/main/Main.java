@@ -33,10 +33,10 @@ public class Main {
             Runtime runtime = new Runtime(program.getSymbolTable(), program.getCommandList());
             runtime.run();
             
-            System.out.println(parser.generateJSON());
+            //System.out.println(parser.generateJSON());
             
             
-            
+            System.out.println();
             
             System.out.println(program.generateTarget());
             try {

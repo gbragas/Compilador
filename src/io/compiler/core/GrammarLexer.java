@@ -132,11 +132,6 @@ public class GrammarLexer extends Lexer {
 	       }
 	       return topo.toJson();
 	    }
-	    
-	    
-	    
-	    
-	    
 
 	    public void updateType() {
 	        for (Var v: currentDecl) {
